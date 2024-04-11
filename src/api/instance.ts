@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(async (config) => {
   return config
 })
 
-axiosInstance.interceptors.request.use(
+axiosInstance.interceptors.response.use(
   (response) => response,
   (error: AxiosError) => {
     const isLoggedIn = !!store.getState().auth.authData.accessToken

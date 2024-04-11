@@ -17,9 +17,7 @@ export const Main = () => {
 
   const renderProfile = () => (
     <div>
-      <div>
-        Вы успешно авторизовались, <b>{profile}</b>{' '}
-      </div>
+      <div>Вы успешно авторизовались, {profile}</div>
       <button onClick={() => dispatch(logoutUser())}>Logout</button>
       <button onClick={() => dispatch(getProfile())}>update profile</button>
     </div>

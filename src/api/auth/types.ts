@@ -5,6 +5,6 @@ export interface ILoginRequest {
   password: string
 }
 
-export interface ILoginresponse {
+export interface ILoginResponse {
   accessToken: string
 }

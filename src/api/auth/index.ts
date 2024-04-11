@@ -1,9 +1,9 @@
 import { Axios, AxiosPromise } from 'axios'
 import { Endpoints } from '../endpoints'
 import { axiosInstance } from '../instance'
-import { ILoginRequest, ILoginresponse } from './types'
+import { ILoginRequest, ILoginResponse } from './types'
 
-export const login = (params: ILoginRequest): AxiosPromise<ILoginresponse> =>
+export const login = (params: ILoginRequest): AxiosPromise<ILoginResponse> =>
   axiosInstance.post(Endpoints.AUTH.LOGIN, params)
 
 export const logout = (): AxiosPromise => {
@@ -12,3 +12,6 @@ export const logout = (): AxiosPromise => {
 
 export const getProfile = (): AxiosPromise<string> =>
   axiosInstance.get(Endpoints.AUTH.PROFILE)
+
+export const refreshToken = (): AxiosPromise<ILoginResponse> =>
+  axiosInstance.get(Endpoints.AUTH.REFRESH)

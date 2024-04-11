@@ -1,5 +1,5 @@
 import { Dispatch } from '@reduxjs/toolkit'
-import { ILoginRequest } from '../../api/auth/types'
+import { ILoginRequest, ILoginResponse } from '../../api/auth/types'
 import {
   loadProfileFailure,
   loadProfileStart,
@@ -12,10 +12,12 @@ import {
 import api from '../../api'
 import { redirect } from 'react-router-dom'
 import { AppDispatch, store } from '..'
+import { AxiosPromise } from 'axios'
+import { isTokenExpired } from '../../utils/jwt'
 
 export const getProfile =
   () =>
-  async (dispatch: AppDispatch): Promise<void> => {
+  async (dispatch: Dispatch): Promise<void> => {
     try {
       dispatch(loadProfileStart())
 
@@ -60,11 +62,27 @@ export const logoutUser =
     }
   }
 
+//переменная для хранения запроса токена(для избежания "состояния гонки")
+let refreshTokenRequest: AxiosPromise<ILoginResponse> | null = null
+
 export const getAccessToken =
   () =>
-  (dispatch: Dispatch<any>): string | null => {
+  async (dispatch: Dispatch<any>): Promise<string | null> => {
     try {
       const accessToken = store.getState().auth.authData.accessToken
+      // debugger
+      if (!accessToken || isTokenExpired(accessToken)) {
+        if (refreshTokenRequest === null) {
+          refreshTokenRequest = api.auth.refreshToken()
+        }
+
+        const res = await refreshTokenRequest
+        refreshTokenRequest = null
+
+        dispatch(loginSuccess(res.data.accessToken))
+
+        return res.data.accessToken
+      }
       return accessToken
     } catch (e) {
       console.error(e)
