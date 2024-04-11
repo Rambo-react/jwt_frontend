@@ -1,11 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '../../store'
-import { logoutUser } from '../../store/auth/actionCreators'
+import { getProfile, logoutUser } from '../../store/auth/actionCreators'
 import { Login } from './components/Login/Login'
 
 export const Main = () => {
   const dispatch = useAppDispatch()
+
+  const profile = useSelector(
+    (state: RootState) => state.auth.profileData.profile
+  )
 
   const isLoggedIn = useSelector(
     (state: RootState) => !!state.auth.authData.accessToken
@@ -13,8 +17,11 @@ export const Main = () => {
 
   const renderProfile = () => (
     <div>
-      <div>Вы успешно авторизовались</div>
+      <div>
+        Вы успешно авторизовались, <b>{profile}</b>{' '}
+      </div>
       <button onClick={() => dispatch(logoutUser())}>Logout</button>
+      <button onClick={() => dispatch(getProfile())}>update profile</button>
     </div>
   )
 
