@@ -54,8 +54,8 @@ export const authReducer = createSlice({
       state.profileData.isLoading = false
       state.profileData.error = action.payload
     },
-    logoutSuccess(state) {
-      state = initialState
+    logoutSuccess() {
+      return initialState
     },
   },
 })
